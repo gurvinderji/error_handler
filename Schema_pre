@@ -1,0 +1,11 @@
+schoolSchema.pre("save", async function (next) {
+  const count = await model("School").countDocuments({ email: this.email });
+
+  if (count) throw next(new Error("User already exist !"));
+
+  next();
+});
+schoolSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password.toString(), 12);
+  next();
+});
